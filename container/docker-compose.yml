@@ -1,0 +1,27 @@
+version: "3"
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:22.0
+    container_name: keycloak01
+    command: start-dev
+    ports:
+      - "8024:8080"
+    environment:
+      - KEYCLOAK_ADMIN=admin 
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgresql:5432/keycloak
+      - KC_DB_USERNAME=postgres
+      - KC_DB_PASSWORD=postgres
+      - KC_FEATURES=update-email
+    networks:
+      - local_network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./conf:/opt/keycloak/conf
+      - /home/grupoitss/workspace/experiment/keycloak/SPI/docnix-user-storage-jpa/target/docnix-keycloak-extension.jar:/opt/keycloak/providers/docnix-keycloak-extension.jar
+      
+networks:
+  local_network:
+    external: true
